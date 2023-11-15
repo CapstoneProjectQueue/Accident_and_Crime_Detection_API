@@ -12,11 +12,15 @@ model = tf.keras.models.load_model('C:/github/Accident_and_Crime_Detection_API/m
 
 def prepare_img(file):
     video = cv2.VideoCapture(file)
+    img_array=[]
     while True:
         ret, frame = video.read()
         frame = int(video.get(1))
         if(frame%60==0):
-            img_array.append(cv2.imwrite)
+            img_array.append(cv2.imwrite(frame))
+        if not ret:
+            break
+    video.release()
     return img_array
 
 @app.route("/predict", methods=['POST'])
@@ -25,8 +29,14 @@ def model():
         file = request.files['video'] # 서버에서 이미지 받아오기
         if 'video' not in request.files: # 서버에서 받아온 이미지가 없을 경우
             return jsonify({'error':'영상 없음'})
-        prediction = model.predict(img) # 모델에 돌리기
-        return jsonify({'result':prediction}) # 결과 전송
+        img_array=prepare_img(file)
+        prediction=[]
+        for i in img_array:
+            prediction.append(model.predict(img_array[i]))
+        for i in prediction:
+            if prediction[i]==0:
+                return jsonify({'result':'abnormal'})
+        return jsonify({'result':'normal'}) # 결과 전송
     
 
 if __name__=='__main__':

@@ -1,6 +1,6 @@
 from flask import Flask, render_template, jsonify, request
 from flask_restx import Api, Resource #Api 개발을 위해 flask_restx 사용
-from tf import tensorflow
+# from tf import tensorflow
 from PIL import Image # 이미지 처리 라이브러리
 import cv2
 import os
@@ -8,7 +8,8 @@ import glob
 
 app = Flask(__name__)
 api = Api(app) 
-model = tf.keras.models.load_model('C:/github/Accident_and_Crime_Detection_API/model.h5')
+# model = tf.keras.models.load_model('C:/github/Accident_and_Crime_Detection_API/model.h5')
+
 
 def prepare_img(file):
     video = cv2.VideoCapture(file)
@@ -22,6 +23,10 @@ def prepare_img(file):
             break
     video.release()
     return img_array
+
+@app.route("/")
+def main():
+    return render_template('index.html')
 
 @app.route("/predict", methods=['POST'])
 def model():

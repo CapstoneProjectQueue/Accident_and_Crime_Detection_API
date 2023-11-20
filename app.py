@@ -26,7 +26,7 @@ def prepare_img(file):
 
 @app.route("/")
 def main():
-    return render_template('index.html')
+    return render_template('./templates/index.html')
 
 @app.route("/predict", methods=['POST'])
 def model():

@@ -24,10 +24,6 @@ def prepare_img(file):
     video.release()
     return img_array
 
-@app.route("/")
-def main():
-    return render_template('./templates/index.html')
-
 @app.route("/predict", methods=['POST'])
 def model():
     if request.method=='POST':

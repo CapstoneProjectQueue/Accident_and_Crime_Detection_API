@@ -1,4 +1,3 @@
-
 <html lang="en" >
 <head>
   <meta charset="UTF-8">
@@ -32,15 +31,13 @@
 				</svg>
 			</span>
 		</div>
-		<!-- <button class="btn-close">
-			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" fill="var(--c-text-secondary)"/></svg>
-		</button> -->
+		
 	</div>
 	<div class="modal-body">
 		<h2 class="modal-title">범죄 및 사고 감지</h2>
 		<p class="modal-description">영상 파일을 통해 실신과 폭행 분석이 가능합니다</p>
 		<input id="input" type="file"/>
-		<button id="area" class="upload-area" onclick = "uploadClick();" >
+		<button id="area" class="upload-area" onclick = "uploadClick();" onchange="showName();" >
 			<span class="upload-area-icon">
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="340.531" height="419.116" viewBox="0 0 340.531 419.116">
   <g id="files-new" clip-path="url(#clip-files-new)">
@@ -55,13 +52,18 @@
 		</button>
 	</div>
 	<div class="modal-footer">
-		<button class="btn-primary" onclick="upload()">분석</button></a>
+		<button class="btn-primary" onclick="upload();">분석</button></a>
 	</div>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
+	let file;
+	//const axios=require('axios');
+
 	function showName(){
 		let input = document.getElementById("input");
+		file = input.files[0];
 		let name = input.files[0].name;
 		let label = document.getElementById("upload-area-description");
 		label.textContent=name;
@@ -73,15 +75,17 @@
 		input.click();
 	}
 
-	let formData = new FormData();
-	const upload= ()=>{
+
+	function upload(){
+		let formData = new FormData();
 		formData.append('file', file);
-		fetch('http://localhost:3000/preict', {
-			method:'POST',
-			body:formData,
-		}).then(res=>res.json())
+		axios.post('http://localhost:5000/preict', formData)
+		.then(res=>res.json())
 		.then(data=>{
 			console.log(data);
+		})
+		.catch(err=>{
+			console.log(err);
 		})
 	};
 </script>

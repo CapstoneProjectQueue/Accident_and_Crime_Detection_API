@@ -2,15 +2,15 @@ import cv2
 import os
 import glob
 
-video = '....나중에쓸것'
+video = 'outsidedoor_04_assult'
 
 # 디렉토리 경로
-path_dir = '이거도 나중에...'
+path_dir = 'C:/Users/USER/Desktop/capstonequeue/'
 folder_list = os.listdir(path_dir+video)
 
 # 디렉토리 안 영상들 프레임 추출
-for i in foler_list:
-    file_list = glob.glob('./'+video+'/'+i+'/*.mp4')
+for i in folder_list:
+    file_list = glob.glob('C:/Users/USER/Desktop/capstonequeue/'+video+'/'+i+'/*.mp4')
 
     for j in file_list:
         vidcap = cv2.VideoCapture(j)
@@ -26,13 +26,11 @@ for i in foler_list:
             frame = int(vidcap.get(1))
             if(frame % 60 == 0):
 
-                # 이미지 사이즈 변경
-                # image = cv2.resize(image, (960, 540)) (몇으로 할건지?)
-
-                title = './img/'+video+'/'+os.path.basename(j)+"_%d_frame_%d.jpg" % (count, frame)
+                image = cv2.resize(image, (960, 540))
+                
+                title = 'C:/Users/USER/Desktop/capstonequeue/img/'+video+'/'+os.path.basename(j)+"_%d_frame_%d.jpg" % (count, frame)
                 cv2.imwrite(title, image)
                 print(title+" 저장")
 
                 count += 1
 
-#이미지저장될 폴더 만들어둬야함.

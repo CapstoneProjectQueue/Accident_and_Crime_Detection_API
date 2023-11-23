@@ -163,29 +163,32 @@ for img in imgs:
     data.append(np.array(image))
 
 
-# X_test=np.array(data)
-
-# pred = np.argmax(model.predict(X_test), axis=-1)
-
-# #Accuracy with the test data
-# from sklearn.metrics import accuracy_score #이거 또들어가는게 맞는지 확실히 모르겠음
-# print(accuracy_score(labels, pred))
-
 
 X_test = np.array(data)
-pred = np.argmax(model.predict(X_test), axis=-1)
+y_pred = model.predict(X_test)
+y_pred = (y_pred > 0.8).astype("int32")
 
 # 예측 결과를 "정상" 또는 "비정상"으로 매핑
 class_labels = {0: "비정상", 1: "정상"}
-predicted_labels = [class_labels[i] for i in pred]
+predicted_labels = [class_labels[i] for i in y_pred.flatten()]
 
 # 예측 결과 출력
 for i, label in enumerate(predicted_labels):
     print(f"이미지 {i+1}: {label}")
 
 #Accuracy with the test data
-from sklearn.metrics import accuracy_score #이거 또들어가는게 맞는지 확실히 모르겠음
-print(accuracy_score(labels, pred))
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
+acc = accuracy_score(labels, y_pred)
+prec = precision_score(labels, y_pred)
+rec = recall_score(labels, y_pred)
+f1 = f1_score(labels, y_pred)
+
+## print results
+print(f"정확도(Accuracy): {acc:.4f}")
+print(f"정밀도(Precision): {prec:.4f}")
+print(f"재현율(Recall): {rec:.4f}")
+print(f"F1 점수(F1 Score): {f1:.4f}")
 
 ## Save Model
 model.save('abnormal_normal_classifier.h5')
